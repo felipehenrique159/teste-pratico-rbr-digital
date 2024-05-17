@@ -5,36 +5,30 @@ interface FuncionarioInterface {
     cargo: string;
     departamento: string;
 }
-
 export default class FuncionarioService {
     static async criarNovoFuncionario(funcionario: FuncionarioInterface) {
-        try {
-            const novoFuncionario = new Funcionario({
-                nome: funcionario.nome,
-                cargo: funcionario.cargo,
-                departamento: funcionario.departamento,
-            });
+        const novoFuncionario = new Funcionario({
+            nome: funcionario.nome,
+            cargo: funcionario.cargo,
+            departamento: funcionario.departamento,
+        });
 
-            return await novoFuncionario.save();
-
-        } catch (error) {
-            console.error('Erro ao criar o funcionário:', error);
-        }
+        return await novoFuncionario.save();
     }
 
     static async listarTodos() {
-        try {
-            return await Funcionario.find();
-        } catch (error) {
-            console.error('Erro ao listar funcionários:', error);
-        }
+        return await Funcionario.find();
     }
 
     static async listarFuncionario(id: string) {
-        try {
-            return await Funcionario.findById(id);
-        } catch (error) {
-            console.error('Erro ao listar funcionários:', error);
-        }
+        return await Funcionario.findById(id);
+    }
+
+    static async atualizarFuncionario(id: string, funcionario: FuncionarioInterface) {
+        return await Funcionario.findByIdAndUpdate(id, funcionario, { new: true, runValidators: true });
+    }
+
+    static async excluirFuncionario(id: string) {
+        return await Funcionario.findByIdAndDelete(id);
     }
 }
