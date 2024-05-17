@@ -29,4 +29,12 @@ export default class FuncionarioService {
             console.error('Erro ao listar funcionários:', error);
         }
     }
+
+    static async listarFuncionario(id: string) {
+        try {
+            return await Funcionario.findById(id);
+        } catch (error) {
+            console.error('Erro ao listar funcionários:', error);
+        }
+    }
 }

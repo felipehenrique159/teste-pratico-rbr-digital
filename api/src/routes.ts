@@ -28,4 +28,15 @@ routes.get('/employees', async (req: Request, res: Response) => {
   }
 });
 
+routes.get('/employees/:id', async (req: Request, res: Response) => {
+  try {
+    const funcionario = await FuncionarioService.listarFuncionario(req.params.id)
+
+    res.status(200).json(funcionario);
+  } catch (error) {
+    console.error('Erro ao listar funcionário:', error);
+    res.status(500).json({ error: 'Erro ao listar funcionário' });
+  }
+});
+
 export default routes
