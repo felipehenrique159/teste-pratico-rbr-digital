@@ -15,10 +15,18 @@ export default class FuncionarioService {
                 departamento: funcionario.departamento,
             });
 
-            await novoFuncionario.save();
+            return await novoFuncionario.save();
 
         } catch (error) {
             console.error('Erro ao criar o funcionário:', error);
+        }
+    }
+
+    static async listarTodos() {
+        try {
+            return await Funcionario.find();
+        } catch (error) {
+            console.error('Erro ao listar funcionários:', error);
         }
     }
 }
