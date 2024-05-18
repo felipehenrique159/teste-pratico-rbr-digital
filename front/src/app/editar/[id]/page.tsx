@@ -13,7 +13,11 @@ import Link from 'next/link';
 import { navegarParaHome } from '@/app/actions';
 
 interface Params {
-  params: object
+  id: string;
+}
+
+interface EditarFuncionarioProps {
+  params: Params;
 }
 
 interface Funcionario {
@@ -22,8 +26,10 @@ interface Funcionario {
   departamento: string,
 }
 
-export default function EditarFuncionario({ params }: Params) {
-  const [id, setId] = useState<string>('')
+export default function EditarFuncionario({ params }: EditarFuncionarioProps) {
+
+  const { id } = params;
+
   const [nome, setNome] = useState<string>('')
   const [cargo, setCargo] = useState<string>('')
   const [departamento, setDepartamento] = useState<string>('')
@@ -38,7 +44,7 @@ export default function EditarFuncionario({ params }: Params) {
 
   async function buscarFuncionarioPorId() {
     try {
-      const response = await fetch(`http://localhost:3001/api/employees/${params.id}`)
+      const response = await fetch(`http://localhost:3001/api/employees/${id}`)
       const data = await response.json()
       setNome(data.nome)
       setCargo(data.cargo)
@@ -65,7 +71,7 @@ export default function EditarFuncionario({ params }: Params) {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/employees/${params.id}`, {
+      const response = await fetch(`http://localhost:3001/api/employees/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

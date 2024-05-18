@@ -77,8 +77,8 @@ export default function Home() {
 
   if (chaveOrdenacao) {
     funcionariosFiltrados = funcionariosFiltrados.sort((a, b) => {
-      const valorA = a[chaveOrdenacao]
-      const valorB = b[chaveOrdenacao]
+      const valorA = a[chaveOrdenacao as keyof Funcionario];
+      const valorB = b[chaveOrdenacao as keyof Funcionario];
       if (valorA < valorB) return direcaoOrdenacao === 'asc' ? -1 : 1
       if (valorA > valorB) return direcaoOrdenacao === 'asc' ? 1 : -1
       return 0
