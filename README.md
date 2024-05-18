@@ -1,8 +1,19 @@
 ## Aplicação back-end Teste Prático RBR Digital
 
-## Instruções para rodar a aplicação
+## Instruções para rodar a aplicação em docker
 
 - Execute o comando: **docker-compose up --build** para subir os contêiner
+
+## Instruções para rodar a aplicação em local
+
+Rodar localmente é comum termos problemas com versão das ferramentas, recomendo o uso do docker, mas vamos lá,
+Para rodar a aplicação localmente é simples, só tem um detalhe, na pasta de **api/src/index.ts**
+altere a string de conexão do mongo que está em usando o nome do container **mongodb** para o **localhost**: 
+
+mongoose.connect('mongodb://localhost:27017/nodeapi')
+
+- Acesse a pasta api e execute o comando **npm run start** para subir a aplicação local
+- Acesse a pasta front e execute o comando **npm run dev** para subir a aplicação local
 
 ### Sobre a aplicação
 
