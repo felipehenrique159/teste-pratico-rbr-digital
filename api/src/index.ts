@@ -13,6 +13,6 @@ app.listen(port, () => {
 });
 
 mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://localhost:27017/nodeapi')
+mongoose.connect('mongodb://mongodb:27017/nodeapi')
 
 app.use('/api', routes)
