@@ -7,9 +7,16 @@ import {
   Input,
   Button,
   Text,
+  Link,
 } from '@chakra-ui/react'
-import { FaUser } from "react-icons/fa";
+import { FaUserPlus  } from "react-icons/fa";
 import { navegarParaHome } from '../actions';
+
+interface Funcionario {
+  nome: string,
+  cargo: string,
+  departamento: string,
+}
 
 export default function NovoFuncionario() {
   const [nome, setNome] = useState<string>('')
@@ -20,18 +27,11 @@ export default function NovoFuncionario() {
   const [cargoErro, setCargoErro] = useState<boolean>(false)
   const [departamentoErro, setDepartamentoErro] = useState<boolean>(false)
 
-  interface Funcionario {
-    nome: string,
-    cargo: string,
-    departamento: string,
-  }
-
   const criarFuncionario = async() => {
 
     await validarCamposObrigatorios()
 
     if (nome == '' || cargo == '' || departamento == '') {
-      console.log('return');
       return
     }
 
@@ -81,7 +81,7 @@ export default function NovoFuncionario() {
   return (
     <Flex justifyContent="center" alignItems="center" height="100vh">
         <Flex direction="column" alignItems="center">
-          <FaUser size={80}/>
+          <FaUserPlus  size={100}/>
           <FormControl id="nome" marginTop={10} isRequired>
             <FormLabel>Nome</FormLabel>
             <Input type="text" value={nome} onChange={(event) => setNome(event.target.value)} />
@@ -106,6 +106,11 @@ export default function NovoFuncionario() {
           <Button colorScheme="blue" mt={4} onClick={criarFuncionario}>
             Cadastrar Funcionário
           </Button>
+          <Link href="/">
+            <Button colorScheme="red" mt={4}>
+              Voltar para home
+            </Button>
+          </Link>
         </Flex>
     </Flex>
   )
