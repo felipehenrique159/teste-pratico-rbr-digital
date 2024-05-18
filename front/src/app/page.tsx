@@ -29,7 +29,7 @@ export default function Home() {
 
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [nomeBuscado, setNomeBuscado] = useState('')
   const [chaveOrdenacao, setChaveOrdenacao] = useState('')
   const [direcaoOrdenacao, setDirecaoOrdenacao] = useState<'asc' | 'desc'>('asc')
 
@@ -72,7 +72,7 @@ export default function Home() {
   }, [])
 
   let funcionariosFiltrados = funcionarios.filter(funcionario =>
-    funcionario.nome.toLowerCase().includes(searchTerm.toLowerCase())
+    funcionario.nome.toLowerCase().includes(nomeBuscado.toLowerCase())
   )
 
   if (chaveOrdenacao) {
@@ -93,8 +93,8 @@ export default function Home() {
         </Link>
         <Input
           placeholder="Pesquisar funcionário"
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
+          value={nomeBuscado}
+          onChange={e => setNomeBuscado(e.target.value)}
           maxWidth="40%"
         />
       </Flex>
