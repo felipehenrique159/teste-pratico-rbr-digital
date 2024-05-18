@@ -6,11 +6,11 @@ import {
   FormLabel,
   Input,
   Button,
-  Text,
-  Link,
+  Text
 } from '@chakra-ui/react'
 import { FaUserPlus  } from "react-icons/fa";
 import { navegarParaHome } from '../actions';
+import Link from 'next/link';
 
 interface Funcionario {
   nome: string,
