@@ -1,95 +1,112 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+import { useEffect, useState } from 'react'
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+  Button, Flex, Spinner,
+  Text
+} from '@chakra-ui/react'
+import { SmallAddIcon } from '@chakra-ui/icons'
+import Link from 'next/link'
 
 export default function Home() {
+  interface Funcionario {
+    _id: string,
+    nome: string,
+    cargo: string,
+    departamento: string,
+  }
+
+  const [funcionarios, setFuncionarios] = useState<Funcionario[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  const buscarTodosFuncionarios = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch("http://localhost:3001/api/employees")
+      const data = await response.json()
+      setFuncionarios(data.funcionarios)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const excluirFuncionario = async (idFuncionario: string) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/employees/${idFuncionario}`, {
+        method: 'DELETE'
+      });
+      const data = await response.json()
+      console.log(data);
+      await buscarTodosFuncionarios()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    buscarTodosFuncionarios()
+  }, [])
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    <Flex minWidth='max-content' gap='2' justifyContent="center" direction={'column'} marginTop="10%">
+      <Flex minWidth='max-content' alignItems='center' gap='2' justifyContent="center">
+        <Link href="/novo">
+          <Button colorScheme='green' onClick={buscarTodosFuncionarios}><SmallAddIcon /> Novo funcionário</Button>
+        </Link>
+      </Flex>
+      <Flex minWidth='max-content' alignItems='center' gap='2' justifyContent="center">
+        {isLoading ? (
+          <Spinner size="xl" marginTop={20} />
+        ) : (
+          <TableContainer>
+            <Table variant='simple'>
+              <TableCaption>Lista de Funcionários</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Nome</Th>
+                  <Th>Cargo</Th>
+                  <Th>Departamento</Th>
+                  <Th>Ação</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {funcionarios.length === 0 ? (
+                  <Tr>
+                    <Td colSpan={2}>
+                      <Text>Nenhum funcionário encontrado.</Text>
+                    </Td>
+                  </Tr>
+                ) : (
+                  funcionarios.map(funcionario => (
+                    <Tr key={funcionario._id}>
+                      <Td>{funcionario.nome}</Td>
+                      <Td>{funcionario.cargo}</Td>
+                      <Td>{funcionario.departamento}</Td>
+                      <Td>
+                        <Link href={`/editar/${funcionario._id}`}>
+                          <Button colorScheme='blue'>Editar</Button>
+                        </Link>
+                        <Button colorScheme='red' marginLeft={2} onClick={() => excluirFuncionario(funcionario._id)}>
+                          Excluir
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))
+                )}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
+      </Flex>
+    </Flex>
+  )
 }
